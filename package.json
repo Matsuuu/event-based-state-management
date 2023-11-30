@@ -19,5 +19,8 @@
   "homepage": "https://github.com/Matsuuu/event-based-state-management#readme",
   "devDependencies": {
     "@web/dev-server": "^0.4.1"
+  },
+  "dependencies": {
+    "lit": "^3.1.0"
   }
 }
