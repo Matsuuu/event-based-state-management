@@ -2,11 +2,9 @@ import { html, render } from "lit";
 import { EventManager } from "../event-manager.js";
 import { UsernameChanged } from "../events/user-name-changed.js";
 import { EventManagerUpdated } from "../events/event-manager-updated";
+import { ButtonClicked } from "../events/button-clicked.js";
 
 export function HomeView() {
-
-    let user = "World";
-
     /**
      * @param {SubmitEvent} ev
      */
@@ -24,8 +22,15 @@ export function HomeView() {
         EventManager.dispatchEvent(new UsernameChanged(userName.toString()));
     }
 
+    function onButtonClick() {
+        EventManager.dispatchEvent(new ButtonClicked());
+    }
+
     const view = () => html`
-        <h2>Home ${user}!</h2>
+        <h2>Home ${EventManager.getUserName()}!</h2>
+
+        <p>You've clicked this button ${EventManager.getButtonClickCount()} times</p>
+        <button @click=${onButtonClick}>Click</button>
 
         <form @submit=${onFormSubmit}>
             <input type="text" name="user-name" />
@@ -36,7 +41,6 @@ export function HomeView() {
     `;
 
     EventManager.addEventListener(EventManagerUpdated.name, (ev) => {
-        user = EventManager.getUserName();
         // Re-render
         render(view(), document.body);
     });
