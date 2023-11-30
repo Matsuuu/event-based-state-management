@@ -1,0 +1,23 @@
+{
+  "name": "event-based-state-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "web-dev-server --node-resolve --open --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matsuuu/event-based-state-management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Matsuuu/event-based-state-management/issues"
+  },
+  "homepage": "https://github.com/Matsuuu/event-based-state-management#readme",
+  "devDependencies": {
+    "@web/dev-server": "^0.4.1"
+  }
+}
