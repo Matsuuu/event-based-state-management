@@ -1,3 +1,11 @@
+/**
+ * This is an example of utilizing the Event and EventTarget API's to create
+ * custom state management -style handling for your project's events/state.
+ * 
+ * These API's are cross-platform, meaning that you can run this code in either 
+ * Browsers or even NodeJS and it will work. This makes it extremely portable
+ * and you can build on top of this system with a lot of different patterns.
+ */
 
 // Util methods
 
