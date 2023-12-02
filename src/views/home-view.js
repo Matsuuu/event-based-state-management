@@ -40,8 +40,11 @@ export function HomeView() {
         </form>
     `;
 
-    EventManager.addEventListener(EventManagerUpdated.name, (ev) => {
-        // Re-render
+    EventManager.addEventListener(EventManagerUpdated.forProperty("buttonClickedCount"), (ev) => {
+        render(view(), document.body);
+    });
+
+    EventManager.listen("buttonClickedCount", (ev) => {
         render(view(), document.body);
     });
 

@@ -3,12 +3,17 @@ import { EventManagerInitialized } from "./events/event-manager-initialized.js";
 import { EventManagerUpdated } from "./events/event-manager-updated.js";
 import { UsernameChanged } from "./events/user-name-changed.js";
 import { UserSettingsReset } from "./events/user-settings-reset.js";
+import { getStateProxy } from "./reactive-properties.js";
+
 
 class EventManager extends EventTarget {
 
     #state = {
-        userName: undefined,
-        buttonClickedCount: 0
+        buttonClickedCount: 0,
+        user: {
+            name: undefined
+        },
+        alerts: []
     };
 
     MANAGED_EVENTS = [
@@ -18,6 +23,9 @@ class EventManager extends EventTarget {
 
     constructor() {
         super();
+
+        // this.#state = new Proxy(this.#state, getStateProxy(this));
+        this.#state = getStateProxy(this.#state, this);
 
         this.MANAGED_EVENTS.forEach(ev => {
             // This maps all of the events to the `handleEvent` function
@@ -29,15 +37,22 @@ class EventManager extends EventTarget {
     }
 
     /**
+     * @param {string} propKey
+     * @param {EventListenerOrEventListenerObject} callback
+     */
+    listen(propKey, callback) {
+        return this.addEventListener(EventManagerUpdated.forProperty(propKey), callback);
+    }
+
+
+    /**
      * @param {Event} ev
      */
     handleEvent(ev) {
-        console.log("Managing event ", ev)
         if (ev instanceof UsernameChanged) {
             // Type narrowing makes it so that inside the if-block we 
             // are actually using the UsernameChanged type and not just Event
-            this.#state.userName = ev.userName
-            this.broadcast(new EventManagerUpdated({ userName: ev.userName }));
+            this.#state.user.name = ev.userName
 
             // We can call anything inside of that class with type safety as 
             // we've done the narrowing through instanceof. This also is runtime and 
@@ -50,7 +65,6 @@ class EventManager extends EventTarget {
 
         if (ev instanceof ButtonClicked) {
             this.#state.buttonClickedCount += 1;
-            this.broadcast(new EventManagerUpdated({ buttonClickedCount: this.#state.buttonClickedCount }));
         }
     }
 
@@ -59,7 +73,7 @@ class EventManager extends EventTarget {
     }
 
     getUserName() {
-        return this.#state.userName;
+        return this.#state.user.name;
     }
 
     /**
@@ -73,6 +87,7 @@ class EventManager extends EventTarget {
 }
 
 
-const instance = new EventManager();
+let instance = new EventManager();
 
 export { instance as EventManager };
+export { EventManager as EventManagerClass };

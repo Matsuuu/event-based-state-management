@@ -1,9 +1,21 @@
 export class EventManagerUpdated extends Event {
     /**
-     * @param {Record<string, unknown>} updatedProperties
+     * @param {string} key
+     * @param {unknown} oldValue
+     * @param {unknown} newValue
      */
-    constructor(updatedProperties) {
-        super(EventManagerUpdated.name);
-        this.updatedProperties = updatedProperties;
+    constructor(key, oldValue, newValue) {
+        super(EventManagerUpdated.name + "-" + key);
+
+        this.key = key;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
+
+    /**
+     * @param {string} propertyName
+     */
+    static forProperty(propertyName) {
+        return EventManagerUpdated.name + "-" + propertyName;
     }
 }
