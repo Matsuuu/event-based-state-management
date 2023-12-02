@@ -56,7 +56,6 @@ function setupProxy(targetObject, thisInstance, propPath) {
          */
         set(obj, prop, value) {
             // console.log("SET ", { obj, prop, value });
-
             const oldValue = Reflect.get(obj, prop);
             const reflectResult = Reflect.set(obj, prop, value);
 
@@ -67,7 +66,6 @@ function setupProxy(targetObject, thisInstance, propPath) {
                     propKey += ".";
                 }
                 propKey = propKey + eventPropPaths.shift();
-                console.log("Submitting update event to  ---- ", propKey)
                 thisInstance.broadcast(new EventManagerUpdated(propKey, oldValue, value));
             }
 

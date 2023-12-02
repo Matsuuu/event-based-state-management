@@ -29,7 +29,6 @@ class EventManager extends EventTarget {
     constructor() {
         super();
 
-        // this.#state = new Proxy(this.#state, getStateProxy(this));
         this.#state = getStateProxy(this.#state, this);
 
         this.MANAGED_EVENTS.forEach(ev => {
