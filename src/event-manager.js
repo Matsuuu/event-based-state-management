@@ -11,7 +11,10 @@ class EventManager extends EventTarget {
     #state = {
         buttonClickedCount: 0,
         user: {
-            name: undefined
+            name: undefined,
+            contact: {
+                phone: undefined
+            }
         },
         alerts: []
     };

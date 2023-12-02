@@ -22,6 +22,23 @@ export function HomeView() {
         EventManager.dispatchEvent(new UsernameChanged(userName.toString()));
     }
 
+    /**
+     * @param {SubmitEvent} ev
+     */
+    function onPhoneFormSubmit(ev) {
+        ev.preventDefault();
+        const form = /** @type { HTMLFormElement } */ (ev.target);
+        const formData = new FormData(form);
+
+        const phone = formData.get("phone-number");
+        if (!phone) {
+            return;
+        }
+
+        // This would be `EventManager` when called from outside of this file.
+        // EventManager.dispatchEvent(new UsernameChanged(userName.toString()));
+    }
+
     function onButtonClick() {
         EventManager.dispatchEvent(new ButtonClicked());
     }
@@ -33,7 +50,14 @@ export function HomeView() {
         <button @click=${onButtonClick}>Click</button>
 
         <form @submit=${onFormSubmit}>
-            <input type="text" name="user-name" />
+            <input placeholder="Username" type="text" name="user-name" />
+
+            <input type="submit" />
+            <input type="reset" />
+        </form>
+
+        <form @submit=${onPhoneFormSubmit}>
+            <input placeholder="Phone" type="text" name="phone-number" />
 
             <input type="submit" />
             <input type="reset" />
@@ -41,11 +65,20 @@ export function HomeView() {
     `;
 
     EventManager.addEventListener(EventManagerUpdated.forProperty("buttonClickedCount"), (ev) => {
+        console.log("buttonClickedCount updated!");
         render(view(), document.body);
     });
 
     EventManager.listen("buttonClickedCount", (ev) => {
         render(view(), document.body);
+    });
+
+    EventManager.listen("user.name", (ev) => {
+        console.log("User.name updated!");
+    });
+
+    EventManager.listen("user", (ev) => {
+        console.log("User updated!");
     });
 
     return view();
