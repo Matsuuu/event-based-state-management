@@ -2,6 +2,7 @@ import { ButtonClicked } from "./events/button-clicked.js";
 import { EventManagerInitialized } from "./events/event-manager-initialized.js";
 import { EventManagerUpdated } from "./events/event-manager-updated.js";
 import { UsernameChanged } from "./events/user-name-changed.js";
+import { UserPhoneNumberUpdated } from "./events/user-phone-number-updated.js";
 import { UserSettingsReset } from "./events/user-settings-reset.js";
 import { getStateProxy } from "./reactive-properties.js";
 
@@ -21,7 +22,8 @@ class EventManager extends EventTarget {
 
     MANAGED_EVENTS = [
         UsernameChanged,
-        ButtonClicked
+        ButtonClicked,
+        UserPhoneNumberUpdated
     ]
 
     constructor() {
@@ -68,6 +70,10 @@ class EventManager extends EventTarget {
 
         if (ev instanceof ButtonClicked) {
             this.#state.buttonClickedCount += 1;
+        }
+
+        if (ev instanceof UserPhoneNumberUpdated) {
+            this.#state.user.contact.phone = ev.phone;
         }
     }
 

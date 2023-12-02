@@ -2,12 +2,15 @@ import { html, render } from "lit";
 import { EventManager } from "../event-manager.js";
 import { UsernameChanged } from "../events/user-name-changed.js";
 import { EventManagerUpdated } from "../events/event-manager-updated";
+import { UserPhoneNumberUpdated } from "../events/user-phone-number-updated.js"
 import { ButtonClicked } from "../events/button-clicked.js";
 
 export function HomeView() {
+
+    let phone = "";
     /**
-     * @param {SubmitEvent} ev
-     */
+     * @param { SubmitEvent } ev
+        */
     function onFormSubmit(ev) {
         ev.preventDefault();
         const form = /** @type { HTMLFormElement } */ (ev.target);
@@ -23,8 +26,8 @@ export function HomeView() {
     }
 
     /**
-     * @param {SubmitEvent} ev
-     */
+     * @param { SubmitEvent } ev
+        */
     function onPhoneFormSubmit(ev) {
         ev.preventDefault();
         const form = /** @type { HTMLFormElement } */ (ev.target);
@@ -36,7 +39,7 @@ export function HomeView() {
         }
 
         // This would be `EventManager` when called from outside of this file.
-        // EventManager.dispatchEvent(new UsernameChanged(userName.toString()));
+        EventManager.dispatchEvent(new UserPhoneNumberUpdated(phone.toString()));
     }
 
     function onButtonClick() {
@@ -48,6 +51,8 @@ export function HomeView() {
 
         <p>You've clicked this button ${EventManager.getButtonClickCount()} times</p>
         <button @click=${onButtonClick}>Click</button>
+
+        <p>Phone: ${phone}</p>
 
         <form @submit=${onFormSubmit}>
             <input placeholder="Username" type="text" name="user-name" />
@@ -64,21 +69,34 @@ export function HomeView() {
         </form>
     `;
 
+    function updateView() {
+        render(view(), document.body);
+    }
+
     EventManager.addEventListener(EventManagerUpdated.forProperty("buttonClickedCount"), (ev) => {
         console.log("buttonClickedCount updated!");
-        render(view(), document.body);
+        updateView();
     });
 
     EventManager.listen("buttonClickedCount", (ev) => {
-        render(view(), document.body);
+        updateView();
     });
 
     EventManager.listen("user.name", (ev) => {
         console.log("User.name updated!");
+        updateView();
     });
 
     EventManager.listen("user", (ev) => {
         console.log("User updated!");
+        updateView();
+    });
+
+    EventManager.listen("user.contact.phone", (/** @type { EventManagerUpdated } */ev) => {
+        console.log("User phone updated!");
+        console.log(ev);
+        phone = ev.newValue.toString();
+        updateView();
     });
 
     return view();
