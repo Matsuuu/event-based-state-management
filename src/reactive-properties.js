@@ -21,7 +21,7 @@ export function getStateProxy(stateObject, thisInstance) {
  */
 function setupNestedProxy(targetObject, thisInstance, propPath) {
     [...Object.entries(targetObject)].filter(
-        entry => entry[1] instanceof Object && !Array.isArray(entry[1])
+        ([key, value]) => value instanceof Object && !Array.isArray(value)
     ).forEach(entry => {
         const key = entry[0];
         const value = entry[1];

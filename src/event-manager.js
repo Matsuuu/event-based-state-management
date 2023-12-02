@@ -54,13 +54,8 @@ class EventManager extends EventTarget {
      */
     handleEvent(ev) {
         if (ev instanceof UsernameChanged) {
-            // Type narrowing makes it so that inside the if-block we 
-            // are actually using the UsernameChanged type and not just Event
             this.#state.user.name = ev.userName
 
-            // We can call anything inside of that class with type safety as 
-            // we've done the narrowing through instanceof. This also is runtime and 
-            // not just compile time
             if (ev.isUserNameCleared()) {
                 this.broadcast(new UserSettingsReset());
             }
@@ -76,14 +71,6 @@ class EventManager extends EventTarget {
         }
     }
 
-    getButtonClickCount() {
-        return this.#state.buttonClickedCount;
-    }
-
-    getUserName() {
-        return this.#state.user.name;
-    }
-
     /**
      * Broadcast an event to everyone listening to said event 
      * in the EventManager instance.
@@ -91,6 +78,14 @@ class EventManager extends EventTarget {
      */
     broadcast(ev) {
         this.dispatchEvent(ev);
+    }
+
+    getButtonClickCount() {
+        return this.#state.buttonClickedCount;
+    }
+
+    getUserName() {
+        return this.#state.user.name;
     }
 }
 
